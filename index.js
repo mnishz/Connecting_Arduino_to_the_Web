@@ -2,17 +2,19 @@ var http = require('http');
 var express = require('express');
 var app = express();
 var server = http.createServer(app);
+var io = require('socket.io')(server);
 
-app.set('view engine', 'ejs')
+app.set('view engine', 'ejs');
 app.use(express.static(__dirname + '/public'));
 
-var title = "Some Arduino components starting with p"
-var componentArray = ['potentiometer', 'piezo', 'phototransistor', 'pushbutton'];
-
 app.get('/', function (req, res) {
-    res.render('index', {
-        title: title,
-        components: componentArray
+    res.render('index')
+});
+
+io.on('connection', function(socket){
+    console.log('Connection to client established');
+    socket.on('disconnect', function(){
+        console.log('Server has disconnected');
     });
 });
 
