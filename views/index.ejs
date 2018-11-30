@@ -6,11 +6,29 @@
     <div class="wrapper">
         <h1>Using socket.io</h1>
         <p>This page will update with socket.io</p>
+        <!-- 押すためのボタン -->
+        <button id="clicked">click me</button>
+        <!-- サーバ側から受け取ったデータ(ここでは内部データ)を表示する -->
+        <div id="updates"></div>
     </div>
 
     <script src="https://cdn.socket.io/socket.io-1.2.0.js"></script>
     <script>
+        // ここのsocket = io()が感覚的に理解できない
+        // web page側からはsocketしか見えないのでこういう書き方でいいのだろうか。。
         var socket = io();
+        var button = document.getElementById('clicked');
+
+        // ボタンが押された時の挙動を定義
+        button.onclick = function(e){
+            // 接続(socket)にイベント(メッセージ？)を送信
+            socket.emit('clicked message', 'clicked');
+        }
+        // イベントを受け取った時の挙動を定義
+        socket.on('clicked message', function(msg){
+            // 'updates' の中身を受け取ったデータで更新
+            document.getElementById('updates').innerHTML = msg;
+        });
     </script>
 </body>
 </html>
