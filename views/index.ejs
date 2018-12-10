@@ -1,34 +1,41 @@
 <!DOCTYPE html>
-<head>
-    <title>WebSockets</title>
-</head>
-<body>
-    <div class="wrapper">
-        <h1>Using socket.io</h1>
-        <p>This page will update with socket.io</p>
-        <!-- 押すためのボタン -->
-        <button id="clicked">click me</button>
-        <!-- サーバ側から受け取ったデータ(ここでは内部データ)を表示する -->
-        <div id="updates"></div>
-    </div>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <title>Get data</title>
+    </head>
+    <body>
+        <h1>Arduino data</h1>
+        <p>Press the button on the Arduino to change the color of the square</p>
+        <p>The button is <span id="button-state"></span> </p>
+        <svg width="120" height="120" viewBox="0 0 120 120">
+            <rect id="change-color"
+                  fill="LightSkyBlue"
+                  width="120"
+                  height="120"
+                  />
+        </svg>
+        <script src="/socket.io/socket.io.js"></script>
+        <script>
+            var socket = io();
+            var current = "0";
+            var shape = document.getElementById('change-color');
+            var buttonState = document.getElementById('button-state');
+            var colorArray = ["LightSkyBlue", "LightSlateGray", "DarkOliveGreen", "orange", "DarkRed", "gold", "purple"];
 
-    <script src="https://cdn.socket.io/socket.io-1.2.0.js"></script>
-    <script>
-        // ここのsocket = io()が感覚的に理解できない
-        // web page側からはsocketしか見えないのでこういう書き方でいいのだろうか。。
-        var socket = io();
-        var button = document.getElementById('clicked');
-
-        // ボタンが押された時の挙動を定義
-        button.onclick = function(e){
-            // 接続(socket)にイベント(メッセージ？)を送信
-            socket.emit('clicked message', 'clicked');
-        }
-        // イベントを受け取った時の挙動を定義
-        socket.on('clicked message', function(msg){
-            // 'updates' の中身を受け取ったデータで更新
-            document.getElementById('updates').innerHTML = msg;
-        });
-    </script>
-</body>
+            socket.on("data", function(data) {
+                // console.log('data: ', data);
+                if (data === "1") {
+                    buttonState.innerHTML = "pressed";
+                    if (data !== current) {
+                        var newColor = colorArray[Math.floor(Math.random() * colorArray.length)];
+                        shape.style.fill = newColor;
+                    }
+                } else {
+                    buttonState.innerHTML = "not pressed";
+                }
+                current = data;
+            });
+        </script>
+    </body>
 </html>
