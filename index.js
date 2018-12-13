@@ -6,8 +6,7 @@ var io = require('socket.io')(server);
 var SerialPort = require('serialport');
 var ReadLine = require('@serialport/parser-readline');
 var serialport = new SerialPort('/dev/ttyACM0');
-var parser = serialport.pipe(new ReadLine({delimiter: '\n'}))
-// parser.on('data', console.log);
+var parser = serialport.pipe(new ReadLine({delimiter: '\r\n'}))
 app.engine('ejs', require('ejs').__express);
 app.set('view engine', 'ejs');
 app.get ('/', function(req, res) {
@@ -18,12 +17,9 @@ serialport.on('open', function() {
 });
 io.on('connection', function(socket) {
     console.log('socket.io connection');
-    serialport.on('data', function(data) {
-        // data = data.trim();
-        data = data.toString('utf8')
-        if ((data === '1') || (data === '0')) {
-            socket.emit('data', data);
-        }
+    parser.on('data', function(data) {
+        // console.log('data: ', data);
+        socket.emit('data', data);
     });
     socket.on('disconnect', function() {
         console.log('disconnected');

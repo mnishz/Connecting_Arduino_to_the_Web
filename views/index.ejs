@@ -25,7 +25,7 @@
 
             socket.on("data", function(data) {
                 // console.log('data: ', data);
-                if (data === "1") {
+                if (data == 1) {
                     buttonState.innerHTML = "pressed";
                     if (data !== current) {
                         var newColor = colorArray[Math.floor(Math.random() * colorArray.length)];
