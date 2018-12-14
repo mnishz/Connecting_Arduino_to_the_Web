@@ -7,6 +7,7 @@ var SerialPort = require('serialport');
 var ReadLine = require('@serialport/parser-readline');
 var serialport = new SerialPort('/dev/ttyACM0');
 var parser = serialport.pipe(new ReadLine({delimiter: '\r\n'}))
+var curState = 0;
 app.engine('ejs', require('ejs').__express);
 app.set('view engine', 'ejs');
 app.get ('/', function(req, res) {
@@ -18,6 +19,11 @@ serialport.on('open', function() {
 io.on('connection', function(socket) {
     console.log('socket.io connection');
     parser.on('data', function(data) {
+        if (data != curState) {
+            if (data == 1) console.log('0 -> 1')
+            if (data == 0) console.log('1 -> 0')
+            curState = data;
+        }
         // console.log('data: ', data);
         socket.emit('data', data);
     });
