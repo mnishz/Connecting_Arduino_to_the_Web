@@ -24,11 +24,10 @@ serialport.on('open', function() {
 io.on('connection', function(socket) {
     console.log('socket.io connection');
 
-    serialport.on('data', function(data) {
+    parser.on('data', function(data) {
         console.log(data);
         const dataKey = data.slice(0, 2);
-        const dataString = data.slice(2);
-        dataString = dataString.replace(/(\r\n|\n|\r)/gm, "");
+        const dataString = data.slice(2).replace(/(\r\n|\n|\r)/gm, "");
 
         if (dataKey === "BP") {
             const dataArray = dataString.split(",");

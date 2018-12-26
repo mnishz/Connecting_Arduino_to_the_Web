@@ -48,4 +48,4 @@
         const targetP = document.getElementById("bar-" + data.dataKey).getElementsByClassName("text-block")[0].getElementsByTagName("p")[0];
         targetP.innerHTML = data.dataString;
     }
-});
+})();
