@@ -43,9 +43,9 @@ io.on('connection', function(socket) {
         }
     });
 
-// visualizing    socket.on('percentData', function(data) {
-// visualizing        serialport.write(data + 'T');
-// visualizing    });
+    socket.on('percentData', function(data) {
+        serialport.write(data + 'T');
+    });
 
     socket.on('disconnect', function() {
         console.log('disconnected');

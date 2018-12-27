@@ -1,14 +1,19 @@
 int const analogInA0 = A0;
 int const analogInA1 = A1;
 int const pushButton = 2;
-bool lastButtonState = 0;
+int const ledPin = 9;
 
+bool lastButtonState = 0;
 int a0LastValue = 0;
 int a1LastValue = 0;
 
 String const a0String = "A0";
 String const a1String = "A1";
 String const pushButtonString = "BP";
+
+int serverValueRemapped = 0;
+char charRead;
+String inputString = "";
 
 void setup()
 {
@@ -31,6 +36,7 @@ void loop()
             Serial.println(pushButtonString + a0Value + "," + a1Value);
         }
     }
+    checkSerialRead();
 }
 
 int CheckValue(int const aValue, int const aLastValue, String const aString)
@@ -43,4 +49,19 @@ int CheckValue(int const aValue, int const aLastValue, String const aString)
     }
 
     return curLastValue;
+}
+
+void checkSerialRead()
+{
+    if (Serial.available()) {
+        charRead = Serial.read();
+        if (charRead != 'T') {
+            inputString += charRead;
+        } else {
+            int convertedString = inputString.toInt();
+            serverValueRemapped = map(convertedString, 0, 100, 0, 255);
+            analogWrite(ledPin, serverValueRemapped);
+            inputString = "";
+        }
+    }
 }

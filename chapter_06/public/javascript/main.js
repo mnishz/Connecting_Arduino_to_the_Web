@@ -1,8 +1,8 @@
 (function() {
     const socket = io();
-// extending    var totalClickCounter = 0;
-// extending    var accumelatorArrayA0 = [0,0,0,0,0,0,0,0,0,0,0];
-// extending    var accumelatorArrayA1 = [0,0,0,0,0,0,0,0,0,0,0];
+    var totalClickCounter = 0;
+    var accumulatorArrayA0 = [0,0,0,0,0,0,0,0,0,0,0];
+    var accumulatorArrayA1 = [0,0,0,0,0,0,0,0,0,0,0];
 
     socket.on("bar-data", function(data) {
         const current = data.dataKey;
@@ -14,28 +14,27 @@
     });
 
     socket.on("button-data", function(data) {
-// extending        var percetageSpan = document.getElementById('percent');
-// extending        totalClickCounter = totalClickCounter + 2;
-// extending        accumelatorArrayA0[data[0]] = accumelatorArrayA0[data[0]] + 1;
-// extending        accumelatorArrayA1[data[1]] = accumelatorArrayA1[data[1]] + 1;
-// extending        var positiveTotal1 = sumPositiveResponses(accumulatorArrayA0);
-// extending        var positiveTotal2 = sumPositiveResponses(accumulatorArrayA1);
-// extending        var positiveTotals = positiveTotal1 + positiveTotal2;
-// extending        var positivePercentage = (positiveTotals / totalClickCounter) * 100;
-// extending        percent.innerHTML = Math.floor(positivePercentage);
-// visualizing        positivePercentage = Math.floor(positivePercentage);
-// visualizing        percent.innterHTML = positivePercentage;
-// visualizing        socket.emit('percentData', positivePercentage);
+        var percentageSpan = document.getElementById('percent');
+        totalClickCounter = totalClickCounter + 2;
+        accumulatorArrayA0[data[0]] = accumulatorArrayA0[data[0]] + 1;
+        accumulatorArrayA1[data[1]] = accumulatorArrayA1[data[1]] + 1;
+        var positiveTotal1 = sumPositiveResponses(accumulatorArrayA0);
+        var positiveTotal2 = sumPositiveResponses(accumulatorArrayA1);
+        var positiveTotals = positiveTotal1 + positiveTotal2;
+        var positivePercentage = (positiveTotals / totalClickCounter) * 100;
+        positivePercentage = Math.floor(positivePercentage);
+        percentageSpan.innterHTML = positivePercentage;
+        socket.emit('percentData', positivePercentage);
         addRemoveClass("remove");
     });
 
-// extending    function sumPositiveResponses(dataArray) {
-// extending        var positiveTotal = 0;
-// extending        for (var i = 5; i < dataArray.length; i++) {
-// extending            positiveTotal = positiveTotal + dataArray[i];
-// extending        }
-// extending        return positiveTotal;
-// extending    }
+    function sumPositiveResponses(dataArray) {
+        var positiveTotal = 0;
+        for (var i = 5; i < dataArray.length; i++) {
+            positiveTotal = positiveTotal + dataArray[i];
+        }
+        return positiveTotal;
+    }
 
     function addRemoveClass(action) {
         var buttonResponse = document.getElementById("bar-A0").getElementsByClassName("text-block-response")[0];
