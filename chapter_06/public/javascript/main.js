@@ -23,7 +23,7 @@
         var positiveTotals = positiveTotal1 + positiveTotal2;
         var positivePercentage = (positiveTotals / totalClickCounter) * 100;
         positivePercentage = Math.floor(positivePercentage);
-        percentageSpan.innterHTML = positivePercentage;
+        percentageSpan.innerHTML = positivePercentage;
         socket.emit('percentData', positivePercentage);
         addRemoveClass("remove");
     });
